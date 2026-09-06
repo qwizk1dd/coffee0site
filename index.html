@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>COFFEE HOUSE</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5eee6;
+            color: #2b1b12;
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: #2b1b12;
+            color: white;
+            padding: 18px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+        }
+
+        nav {
+            display: flex;
+            gap: 20px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .hero {
+            min-height: 500px;
+            padding: 80px 6%;
+            display: flex;
+            align-items: center;
+            background:
+                linear-gradient(90deg, rgba(30,18,12,.9), rgba(30,18,12,.25)),
+                url("https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1600&q=80")
+                center/cover;
+            color: white;
+        }
+
+        .hero-content {
+            max-width: 600px;
+        }
+
+        .hero h1 {
+            font-size: clamp(42px, 7vw, 80px);
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 20px;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            display: inline-block;
+            border: none;
+            padding: 14px 22px;
+            border-radius: 12px;
+            background: #c47a44;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            transition: .2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            opacity: .9;
+        }
+
+        section {
+            padding: 70px 6%;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 38px;
+            margin-bottom: 35px;
+        }
+
+        .search {
+            display: block;
+            width: min(600px, 100%);
+            margin: 0 auto 30px;
+            padding: 16px;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            font-size: 16px;
+        }
+
+        .menu {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 22px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,.08);
+            transition: .2s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card img {
+            width: 100%;
+            height: 190px;
+            object-fit: cover;
+        }
+
+        .card-content {
+            padding: 20px;
+        }
+
+        .card h3 {
+            font-size: 22px;
+            margin-bottom: 8px;
+        }
+
+        .card p {
+            color: #777;
+            margin-bottom: 15px;
+        }
+
+        .price {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .card .btn {
+            width: 100%;
+        }
+
+        .cart {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 18px;
+            box-shadow: 0 8px 25px rgba(0,0,0,.08);
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .cart-item button {
+            border: none;
+            background: #eee;
+            border-radius: 8px;
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+
+        .total {
+            font-size: 25px;
+            font-weight: bold;
+            margin: 25px 0;
+            text-align: right;
+        }
+
+        .order-form {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 18px;
+        }
+
+        .order-form input,
+        .order-form textarea {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        .order-form textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        footer {
+            background: #2b1b12;
+            color: white;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .empty {
+            text-align: center;
+            color: #777;
+            padding: 20px;
+        }
+
+        .success {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 10px;
+            background: #d9f5df;
+            color: #176b2c;
+            font-weight: bold;
+        }
+
+        @media (max-width: 650px) {
+            header {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            nav {
+                gap: 10px;
+                font-size: 14px;
+            }
+
+            .hero {
+                min-height: 600px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">☕ COFFEE HOUSE</div>
+
+    <nav>
+        <a href="#menu">Меню</a>
+        <a href="#cart">Корзина 🛒</a>
+        <a href="#order">Заказ</a>
+    </nav>
+</header>
+
+
+<section class="hero">
+    <div class="hero-content">
+        <h1>Кофе.<br>Атмосфера.<br>Вайб.</h1>
+
+        <p>
+            Авторский кофе, свежая выпечка
+            и уютное место для своих.
+        </p>
+
+        <a href="#menu" class="btn">
+            Смотреть меню
+        </a>
+    </div>
+</section>
+
+
+<section id="menu">
+
+    <h2 class="section-title">Наше меню</h2>
+
+    <input
+        class="search"
+        id="search"
+        type="text"
+        placeholder="🔎 Поиск по меню..."
+    >
+
+    <div class="menu" id="menuList"></div>
+
+</section>
+
+
+<section id="cart">
+
+    <h2 class="section-title">Корзина 🛒</h2>
+
+    <div class="cart">
+
+        <div id="cartItems"></div>
+
+        <div class="total">
+            Итого: <span id="total">0</span> ₽
+        </div>
+
+        <a href="#order" class="btn">
+            Оформить заказ
+        </a>
+
+    </div>
+
+</section>
+
+
+<section id="order">
+
+    <h2 class="section-title">Оформление заказа</h2>
+
+    <form class="order-form" id="orderForm">
+
+        <input
+            type="text"
+            id="name"
+            placeholder="Ваше имя"
+            required
+        >
+
+        <input
+            type="tel"
+            id="phone"
+            placeholder="Номер телефона"
+            required
+        >
+
+        <textarea
+            id="comment"
+            placeholder="Комментарий к заказу"
+        ></textarea>
+
+        <button class="btn" type="submit">
+            Отправить заказ
+        </button>
+
+        <div class="success" id="success">
+            ✅ Заказ принят! Мы свяжемся с вами.
+        </div>
+
+    </form>
+
+</section>
+
+
+<footer>
+    <p>☕ COFFEE HOUSE © 2026</p>
+    <p>Лучший кофе для лучшего вайба.</p>
+</footer>
+
+
+<script>
+
+const products = [
+    {
+        id: 1,
+        name: "Капучино",
+        description: "Нежный кофе с молочной пенкой",
+        price: 250,
+        image: "https://images.unsplash.com/photo-1572442388796-11668a67e53d?auto=format&fit=crop&w=700&q=80"
+    },
+
+    {
+        id: 2,
+        name: "Латте",
+        description: "Мягкий молочный кофе",
+        price: 280,
+        image: "https://images.unsplash.com/photo-1541167760496-1628856ab772?auto=format&fit=crop&w=700&q=80"
+    },
+{
+        id: 3,
+        name: "Американо",
+        description: "Классический крепкий кофе",
+        price: 200,
+        image: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=700&q=80"
+    },
+
+    {
+        id: 4,
+        name: "Матча",
+        description: "Японский зелёный чай с молоком",
+        price: 320,
+        image: "https://images.unsplash.com/photo-1515823064-d6e0c04616a7?auto=format&fit=crop&w=700&q=80"
+    },
+
+    {
+        id: 5,
+        name: "Чизкейк",
+        description: "Нежный сливочный десерт",
+        price: 350,
+        image: "https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=700&q=80"
+    },
+
+    {
+        id: 6,
+        name: "Круассан",
+        description: "Свежая французская выпечка",
+        price: 220,
+        image: "https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=700&q=80"
+    }
+];
+
+
+let cart = JSON.parse(localStorage.getItem("coffeeCart")) || [];
+
+const menuList = document.getElementById("menuList");
+const cartItems = document.getElementById("cartItems");
+const totalElement = document.getElementById("total");
+const search = document.getElementById("search");
+
+
+function showProducts(list = products) {
+
+    menuList.innerHTML = "";
+
+    if (list.length === 0) {
+        menuList.innerHTML =
+            '<p class="empty">Ничего не найдено 😢</p>';
+
+        return;
+    }
+
+    list.forEach(product => {
+
+        const card = document.createElement("div");
+
+        card.className = "card";
+
+        card.innerHTML = `
+            <img src="${product.image}" alt="${product.name}">
+
+            <div class="card-content">
+
+                <h3>${product.name}</h3>
+
+                <p>${product.description}</p>
+
+                <div class="price">
+                    ${product.price} ₽
+                </div>
+
+                <button
+                    class="btn"
+                    onclick="addToCart(${product.id})"
+                >
+                    Добавить в корзину
+                </button>
+
+            </div>
+        `;
+
+        menuList.appendChild(card);
+    });
+}
+
+
+function addToCart(id) {
+
+    const product = products.find(item => item.id === id);
+
+    cart.push(product);
+
+    saveCart();
+
+    showCart();
+
+    document
+        .getElementById("cart")
+        .scrollIntoView({
+            behavior: "smooth"
+        });
+}
+
+
+function removeFromCart(index) {
+
+    cart.splice(index, 1);
+
+    saveCart();
+
+    showCart();
+}
+
+
+function showCart() {
+
+    cartItems.innerHTML = "";
+
+    if (cart.length === 0) {
+
+        cartItems.innerHTML =
+            '<p class="empty">Корзина пока пустая 🛒</p>';
+
+        totalElement.textContent = "0";
+
+        return;
+    }
+
+    let total = 0;
+
+    cart.forEach((product, index) => {
+
+        total += product.price;
+
+        const item = document.createElement("div");
+
+        item.className = "cart-item";
+
+        item.innerHTML = `
+            <div>
+                <strong>${product.name}</strong>
+                <br>
+                ${product.price} ₽
+            </div>
+
+            <button onclick="removeFromCart(${index})">
+                Удалить
+            </button>
+        `;
+
+        cartItems.appendChild(item);
+    });
+
+    totalElement.textContent = total;
+}
+
+
+function saveCart() {
+
+    localStorage.setItem(
+        "coffeeCart",
+        JSON.stringify(cart)
+    );
+}
+
+
+search.addEventListener("input", () => {
+
+    const value = search.value.toLowerCase();
+
+    const filtered = products.filter(product =>
+        product.name.toLowerCase().includes(value)
+    );
+
+    showProducts(filtered);
+});
+
+
+document
+    .getElementById("orderForm")
+    .addEventListener("submit", function(event) {
+
+        event.preventDefault();
+
+        if (cart.length === 0) {
+
+            alert("Сначала добавьте что-нибудь в корзину ☕");
+
+            return;
+        }
+
+        const name =
+            document.getElementById("name").value;
+
+        const phone =
+            document.getElementById("phone").value;
+
+        console.log("Новый заказ:", {
+            name,
+            phone,
+            cart
+        });
+
+        document
+            .getElementById("success")
+            .style.display = "block";
+
+        cart = [];
+
+        saveCart();
+
+        showCart();
+
+        this.reset();
+    });
+
+
+showProducts();
+
+showCart();
+
+</script>
+
+</body>
+</html>
